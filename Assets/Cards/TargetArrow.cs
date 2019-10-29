@@ -9,7 +9,13 @@ public class TargetArrow : MonoBehaviour
 
     LineRenderer lineRenderer;
 
-    public Character Target { get; internal set; }
+    private Character target;
+    [SerializeField]
+    public Character Target
+    {
+        get { return target; }
+        set { target = value; }
+    }
 
     private void Awake()
     {

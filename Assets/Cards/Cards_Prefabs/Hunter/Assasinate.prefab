@@ -332,8 +332,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.59, y: -3.46}
-  m_SizeDelta: {x: 231.032, y: 67.582}
+  m_AnchoredPosition: {x: -0.59, y: -3.082}
+  m_SizeDelta: {x: 231.032, y: 71.687}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222441899250300498
 CanvasRenderer:
@@ -388,9 +388,9 @@ GameObject:
   - component: {fileID: 223231068574436536}
   - component: {fileID: 61721599730136060}
   - component: {fileID: 114443663896958752}
-  - component: {fileID: 2861824392838649167}
+  - component: {fileID: -3638492206358082539}
   m_Layer: 0
-  m_Name: Double Tap
+  m_Name: Assasinate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -495,14 +495,14 @@ MonoBehaviour:
   m_energyCostText: {fileID: 114704063434966340}
   m_energySlot: {fileID: 212114312758147970}
   m_template: {fileID: 3369732339537303290}
-  m_name: Double Tap
-  m_image: {fileID: 21300000, guid: 1b5ead5054ab53b40b28860b840ff4ff, type: 3}
-  m_description: Hit twice.
-  m_energyCost: 1
+  m_name: Assasinate
+  m_image: {fileID: 21300000, guid: 7b016eb5c9b17b34db4f4ff4803ff208, type: 3}
+  m_description: (If target hp below 30%, deal 2x damage)
+  m_energyCost: 2
   m_uiDesc: {fileID: 1031040482357752}
   m_components: []
   arrow: {fileID: 1994960319}
---- !u!114 &2861824392838649167
+--- !u!114 &-3638492206358082539
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -511,16 +511,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1128266219949218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74eabf8d31f78384d9d669cf674052a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 42453497123dc264fa3704b8ab08d8d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_amount: 0600000008000000
+  m_amount: 0f00000014000000
   m_targetType: 1
   m_target: []
-  m_executeAmount: 0200000002000000
-  m_conditions: []
+  m_executeAmount: 0100000001000000
+  m_conditions:
+  - {fileID: 11400000, guid: 27856d4dc9bb21440b0e28c6c530258f, type: 2}
   m_animationEffect: {fileID: 0}
   hitModifier: 0
+  conditionalAmount: 1e00000028000000
 --- !u!1 &1305787794050330
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,8 +793,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.062, y: 9.272}
-  m_SizeDelta: {x: 185.194, y: 32.854}
+  m_AnchoredPosition: {x: 0, y: 9.272}
+  m_SizeDelta: {x: 185, y: 32.854}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222544257874128784
 CanvasRenderer:

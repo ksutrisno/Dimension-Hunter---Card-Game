@@ -8,10 +8,13 @@ using UnityEditor;
 [System.Serializable]
 public class DealDamageComponent : CardComponent
 {
- 
-
-    public override void Execute()
+    [SerializeField]
+    private float hitModifier = 0;
+    public override bool Execute()
     {
+        base.Execute();
+
+
         m_card.Owner.PlayAttackAnim(0.4f);
 
         foreach (var target in Target)
@@ -23,9 +26,10 @@ public class DealDamageComponent : CardComponent
                 Destroy(obj, 0.5f);
             }
 
-            target.TakeDamage(Amount);
+            target.TakeDamage(Amount, hitModifier);
         }
-  
+
+        return true;
               
     }
 
@@ -45,9 +49,10 @@ public class DealDamageComponent : CardComponent
             desc = "Deal " + Amount.ToString() + " Damage";
         }
 
-        if(ExecuteAmount > 1)
+
+        if(hitModifier < 0)
         {
-            desc += ". \n" + ExecuteAmount.ToString() + " times";
+            desc += ". \n" + hitModifier.ToString() + " hit chance";
         }
 
         return desc;

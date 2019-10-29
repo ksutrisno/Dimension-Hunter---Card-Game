@@ -7,13 +7,15 @@ public class DrawComponent : CardComponent
 {
 
 
-    public override void Execute()
+    public override bool Execute()
     {
+        base.Execute();
+
         foreach (var target in Target)
         {
             target.Hand.Draw(Amount);
         }
-  
+        return true;
     }
 
 

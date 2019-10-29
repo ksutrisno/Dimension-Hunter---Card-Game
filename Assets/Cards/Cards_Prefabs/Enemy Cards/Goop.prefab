@@ -514,11 +514,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eabf8d31f78384d9d669cf674052a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_amount: 060000000a000000
+  m_amount: 0500000008000000
   m_targetType: 1
   m_target: []
-  m_executeAmount: 1
+  m_executeAmount: 
   m_animationEffect: {fileID: 0}
+  hitModifier: 0
 --- !u!1 &1305787794050330
 GameObject:
   m_ObjectHideFlags: 0

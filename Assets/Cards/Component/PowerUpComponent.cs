@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GainStatComponent : MonoBehaviour
+public class PowerUpComponent : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

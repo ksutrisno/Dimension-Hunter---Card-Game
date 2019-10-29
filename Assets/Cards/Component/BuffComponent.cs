@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class BuffComponent : CardComponent
 {
-
-
     [SerializeField]
     Buff buff;
 
-
-
-    public override void Execute()
+    public override bool Execute()
     {
+        base.Execute();
+
+
         Buff newBuff = Instantiate(buff);
 
         newBuff.Duration = Amount;
@@ -20,6 +19,7 @@ public class BuffComponent : CardComponent
         {
             target.AddBuff(newBuff);
         }
+        return true;
  
     }
 
@@ -31,11 +31,11 @@ public class BuffComponent : CardComponent
         }
         else if (TargetType == TargetEnum.kSingle)
         {
-            return  "Inflicts " + buff.name + Amount.ToString() + " " ;
+            return  "Inflicts " + buff.name + " " + Amount.ToString() + " " ;
         }
         else
         {
-            return "Inflicts " + buff.name + Amount.ToString() + " to All";
+            return "Inflicts " + buff.name + " " + Amount.ToString() + " to All";
         }
       
     }

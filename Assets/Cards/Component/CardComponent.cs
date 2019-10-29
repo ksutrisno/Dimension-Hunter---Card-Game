@@ -27,8 +27,10 @@ public abstract class CardComponent : MonoBehaviour
     protected Card m_card;
 
     [SerializeField]
-    protected int [] m_executeAmount = { 1, 1 };
+    private int [] m_executeAmount = { 1, 1 };
 
+    [SerializeField]
+    private Condition[] m_conditions;
 
 
     [SerializeField]
@@ -38,7 +40,7 @@ public abstract class CardComponent : MonoBehaviour
     public List<Character> Target { get => m_target; set => m_target = value; }
     protected int Amount
     { get => m_amount[m_card.Level]; }
-    public int ExecuteAmount
+    public virtual int ExecuteAmount
     {
         get
         {
@@ -54,38 +56,65 @@ public abstract class CardComponent : MonoBehaviour
         }
     }
 
-    public abstract void Execute();
+
+    protected bool ConditionFulfilled()
+    {
+        for (int i = 0; i < m_conditions.Length; i++)
+        {
+            if (!m_conditions[i].ConditionFulfilled(Target, m_card.Owner))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public virtual void UpdateComponent()
+    {
+
+    }
+
+    public virtual bool Execute()
+    {
+        if(Target.Count == 0)
+        {
+            Target.Clear();
+            if (m_targetType == TargetEnum.kSelf)
+            {
+                m_target.Add(m_card.Owner);
+            }
+            else if (m_targetType == TargetEnum.kAll)
+            {
+                Target.Clear();
+                if (m_card.Owner.type == Character.Type.kEnemy)
+                {
+                    m_target.Add(CombatManager.instance.Player);
+                }
+                else
+                {
+                    foreach (Character enemy in CombatManager.instance.Enemies)
+                    {
+                        m_target.Add(enemy);
+                    }
+                }
+            }
+            else
+            {
+                Target.Clear();
+                if (m_card.Owner.type == Character.Type.kEnemy)
+                {
+                    m_target.Add(CombatManager.instance.Player);
+                }
+            }
+
+        }
+        return true;
+      
+    }
 
     public virtual void Init(Card card)
     {
         m_card = card;
 
-        if (m_targetType == TargetEnum.kSelf)
-        {
-
-            m_target.Add(card.Owner);
-        }
-        else if (m_targetType == TargetEnum.kAll)
-        {
-            if(card.Owner.type == Character.Type.kEnemy)
-            {
-                m_target.Add(CombatManager.instance.Player);
-            }
-           else
-            {
-                foreach (Character enemy in CombatManager.instance.Enemies)
-                {
-                    m_target.Add(enemy);
-                }
-            } 
-        }
-        else
-        {
-            if (card.Owner.type == Character.Type.kEnemy)
-            {
-                m_target.Add(CombatManager.instance.Player);
-            }
-        }
     }
 
 

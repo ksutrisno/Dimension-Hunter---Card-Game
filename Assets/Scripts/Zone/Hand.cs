@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Hand : Zone {
 
@@ -15,6 +16,8 @@ public class Hand : Zone {
     [SerializeField]
     private float m_drawSpeed = 1;
 
+    UnityEvent m_onDiscard = new UnityEvent();
+
     protected override void Awake()
     {
         base.Awake();
@@ -25,8 +28,13 @@ public class Hand : Zone {
 
             
             obj.transform.GetComponent<BoxCollider2D>().enabled = m_isInteractable;
+
         };
+
+     
     }
+
+
 
     public void Discard()
     {
@@ -40,6 +48,8 @@ public class Hand : Zone {
             yield return new WaitForSeconds(0.1f);
             card.Discard();
         }
+
+
     }
 
 

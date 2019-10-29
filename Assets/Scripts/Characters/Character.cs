@@ -25,9 +25,11 @@ public abstract class Character : MonoBehaviour {
     protected int m_attack;
     protected int m_armor;
     protected int m_luck;
-    [SerializeField]
+
     protected float m_dodgeChance;
     protected float m_hit;
+
+    protected int m_gold;
 
 
     [SerializeField]
@@ -63,6 +65,7 @@ public abstract class Character : MonoBehaviour {
     [SerializeField]
     private SpriteRenderer m_spriteRenderer;
 
+    [SerializeField]
     private List<Buff> m_buffList = new List<Buff>();
 
     [SerializeField]
@@ -138,6 +141,9 @@ public abstract class Character : MonoBehaviour {
     public int Attack { get => m_attack; set => m_attack = value; }
     public int Armor { get => m_armor; set => m_armor = value; }
     public int Luck { get => m_luck; set => m_luck = value; }
+    public float Health { get => m_health; set => m_health = value; }
+    public float CurrentHealth { get => m_currentHealth; set => m_currentHealth = value; }
+    public List<Buff> BuffList { get => m_buffList; set => m_buffList = value; }
     #endregion
 
     private void Awake()
@@ -148,13 +154,15 @@ public abstract class Character : MonoBehaviour {
         m_characterHealthFill.fillAmount = m_currentHealth / m_health;
     }
 
-    public void TakeDamage(int damage, float hit = 0, bool dodgeAble = true)
+    public bool TakeDamage(int damage, float hit = 0, bool dodgeAble = true)
     {
         int rand = Random.Range(0, 100);
 
-        if(rand < DodgeChance - hit && dodgeAble)
+        if(rand < DodgeChance + (m_luck * 5) - hit - m_hit && dodgeAble)
         {
             Dodge();
+
+            return false;
         }
         else
         {
@@ -172,6 +180,8 @@ public abstract class Character : MonoBehaviour {
             {
                 Die();
             }
+
+            return true;
         }
     }
 
@@ -255,14 +265,14 @@ public abstract class Character : MonoBehaviour {
                 }
             }
 
-            
-     
-            buff.AddEffect(this);
-            m_buffList.Add(buff);
+
+        buff.AddEffect(this);
+        m_buffList.Add(buff);
 
         StatusEffect status = Instantiate(m_statusEffectPrefab, m_buffs.transform);
         status.Image.sprite = buff.Sprite;
         status.DurationText.text = buff.Duration.ToString();
+
 
     }
 

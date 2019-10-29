@@ -8,6 +8,9 @@ TextureImporter:
   - first:
       213: 1979352079906086682
     second: StatusEffect_1
+  - first:
+      213: 5996002636555766395
+    second: StatusEffect_2
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -120,9 +123,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 144
-        width: 96
-        height: 96
+        y: 40
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,7 +133,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a5be239b61fde4d47a8a2796ad281f5a
+      spriteID: 35ce69b2ed2fac44e811db50016f23cb
       internalID: -2902576225207381947
       vertices: []
       indices: 
@@ -140,10 +143,10 @@ TextureImporter:
       name: StatusEffect_1
       rect:
         serializedVersion: 2
-        x: 96
-        y: 144
-        width: 96
-        height: 96
+        x: 32
+        y: 40
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -151,8 +154,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fd0751a7f1b49e946a3c5044cf627ec4
+      spriteID: bac07251db113c34091042a9055614f8
       internalID: 1979352079906086682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StatusEffect_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 40
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b14882e419b071a4589cd8ee13e1804d
+      internalID: 5996002636555766395
       vertices: []
       indices: 
       edges: []

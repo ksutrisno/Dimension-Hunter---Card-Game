@@ -365,14 +365,14 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: a8d85e76965326543a80b5976d5dd7cf, type: 3}
     m_FontSize: 22
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 1
-    m_MaxSize: 40
+    m_MaxSize: 25
     m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 1
+    m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Deal 6 Damage
 --- !u!1 &1128266219949218
@@ -518,6 +518,7 @@ MonoBehaviour:
   m_targetType: 0
   m_target: []
   m_executeAmount: 0100000001000000
+  m_conditions: []
   m_animationEffect: {fileID: 0}
   buff: {fileID: 11400000, guid: 9265a3cc63e5e1444943dfc3f752f91f, type: 2}
 --- !u!1 &1305787794050330

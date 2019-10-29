@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.Events;
 public class Card : MyObject {
 
     public enum Type
@@ -35,7 +35,6 @@ public class Card : MyObject {
     [SerializeField]
     private Sprite m_image;
 
-    [TextArea(3, 10)]
     [SerializeField]
     private string m_description;
 
@@ -77,6 +76,11 @@ public class Card : MyObject {
     public Text NameText { get => m_nameText; set => m_nameText = value; }
     public Text EnergyCostText { get => m_energyCostText; set => m_energyCostText = value; }
     public int Level { get => level; set => level = value; }
+    public UnityAction DiscardAction { get => m_discardAction; set => m_discardAction = value; }
+
+    private UnityAction m_discardAction;
+
+
 
     void Start()
     {
@@ -88,13 +92,17 @@ public class Card : MyObject {
         m_energyCostText.text = m_energyCost.ToString();
 
         m_components = GetComponents<CardComponent>();
-        m_descriptionText.text = "";
-        foreach (CardComponent component in m_components)
+
+        foreach (var component in m_components)
         {
             component.Init(this);
-            m_descriptionText.text += component.GetDescription() + "\n";
         }
+
+        UpdateDesc();
+
     }
+
+
 
     protected void OnMouseEnter()
     {
@@ -102,14 +110,15 @@ public class Card : MyObject {
         {
             m_siblingIndex = transform.GetSiblingIndex();
 
-            transform.localScale *= 1.4f;
+            transform.localScale *= 1.5f;
 
             transform.localPosition -= Vector3.forward * 5;
 
             m_uiDesc.SetActive(true);
 
 
-            transform.localPosition += Vector3.up * 7f;
+            transform.localPosition += Vector3.up * 8f;
+
 
         }
 
@@ -188,7 +197,7 @@ public class Card : MyObject {
 
    
     private bool play;
-
+    
     private IEnumerator PrePlay()
     {
         play = true;
@@ -198,6 +207,7 @@ public class Card : MyObject {
             {
                 play = false;
                 yield return SelectTarget(component);
+                break;
             }
         }
 
@@ -210,17 +220,36 @@ public class Card : MyObject {
 
     private IEnumerator SelectTarget(CardComponent component)
     {
-        Character target = null;
-
+    
         Player player = (Player)Owner;
         transform.position = player.TempZone.position;
 
         arrow.gameObject.SetActive(true);
+
+        bool hasTarget = false;
+
         while(true)
         {
-            target = arrow.Target;
 
-            if(Input.GetMouseButton(1))
+            if(arrow.Target != null && !hasTarget)
+            {
+                SetTarget(arrow.Target);
+                UpdateDesc();
+                hasTarget = true;
+            }
+
+            if (arrow.Target == null && hasTarget == true)
+            {
+
+                ClearTarget();
+
+                UpdateDesc();
+                hasTarget = false;
+            }
+
+
+
+            if (Input.GetMouseButton(1))
             {
                 component.Target.Clear();
                 arrow.gameObject.SetActive(false);
@@ -232,21 +261,50 @@ public class Card : MyObject {
 
             if (Input.GetMouseButton(0))
             {
-                if(target != null)
+                if (arrow.Target != null)
                 {
                     play = true;
-                    component.Target.Add(target);
                     arrow.gameObject.SetActive(false);
                
                     break;
-                }       
-       
+                }  
+                else
+                {
+                    arrow.gameObject.SetActive(false);
+                    play = false;
+                    ReturnToHand();
+
+                    break;
+                }
             }
 
             yield return new WaitForEndOfFrame();
         }
     }
 
+    private void SetTarget(Character target)
+    {
+        foreach (CardComponent component in m_components)
+        {
+            if (component.TargetType == CardComponent.TargetEnum.kSingle)
+            {
+                component.Target.Add(target);
+          
+            }
+        }
+    }
+
+    private void ClearTarget()
+    {
+        foreach (CardComponent component in m_components)
+        {
+            if (component.TargetType == CardComponent.TargetEnum.kSingle)
+            {
+                component.Target.Clear();
+                break;
+            }
+        }
+    }
 
     public virtual IEnumerator Play()
     {
@@ -259,20 +317,36 @@ public class Card : MyObject {
 
         Discard();
 
+
+
     }
 
     private IEnumerator ExecuteComponents()
     {
         foreach (CardComponent component in m_components)
         {
-            for (int i = 0; i < component.ExecuteAmount; i++)
-            {
-                yield return new WaitForSeconds(0.15f);
-                component.Execute();
-            }
+                for (int i = 0; i < component.ExecuteAmount; i++)
+                {
+                    yield return new WaitForSeconds(0.15f);
+                    component.Execute();
+                }
           
         }
+        ClearTarget();
    }
+
+
+    private void UpdateDesc()
+    {
+        m_descriptionText.text = " ";
+        foreach (CardComponent comp in m_components)
+        {
+            comp.UpdateComponent();
+            m_descriptionText.text += comp.GetDescription() + "\n";
+        }
+        m_descriptionText.text += m_description;
+
+    }
 
     public void Discard()
     {

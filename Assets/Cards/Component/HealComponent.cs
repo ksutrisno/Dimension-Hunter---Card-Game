@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class HealComponent : CardComponent {
 
-    public override void Execute()
+
+    public override bool Execute()
     {
+        base.Execute();
+
         foreach (var target in Target)
         {
             target.Heal(Amount);
         }
+        return true;
     }
 
     public override string GetDescription()
