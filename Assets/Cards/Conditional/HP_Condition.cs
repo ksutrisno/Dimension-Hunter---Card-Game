@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "TargetHP", menuName = "ScriptableObjects/Conditional/TargetHP", order = 1)]
-public class TargetHP : Condition
+[System.Serializable]
+public class HP_Condition : Condition
 {
+
+
     public enum Type
     {
         kSmaller,
@@ -23,6 +25,9 @@ public class TargetHP : Condition
 
     [SerializeField]
     private int percentage;
+
+   
+
 
     public override bool ConditionFulfilled(List<Character> targetList, Character owner)
     {

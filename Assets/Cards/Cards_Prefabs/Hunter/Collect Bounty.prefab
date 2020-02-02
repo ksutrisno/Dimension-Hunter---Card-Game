@@ -388,9 +388,9 @@ GameObject:
   - component: {fileID: 223231068574436536}
   - component: {fileID: 61721599730136060}
   - component: {fileID: 114443663896958752}
-  - component: {fileID: -3638492206358082539}
+  - component: {fileID: -8282356905631331797}
   m_Layer: 0
-  m_Name: Assasinate 1
+  m_Name: Collect Bounty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -502,7 +502,7 @@ MonoBehaviour:
   m_uiDesc: {fileID: 1031040482357752}
   m_components: []
   arrow: {fileID: 1994960319}
---- !u!114 &-3638492206358082539
+--- !u!114 &-8282356905631331797
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -511,19 +511,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1128266219949218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42453497123dc264fa3704b8ab08d8d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 74eabf8d31f78384d9d669cf674052a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_amount: 0f00000014000000
+  m_amount: 0000000000000000
   m_targetType: 1
   m_target: []
   m_executeAmount: 0100000001000000
-  m_conditions:
-  - {fileID: 11400000, guid: 27856d4dc9bb21440b0e28c6c530258f, type: 2}
+  m_conditions: []
   m_animationEffect: {fileID: 0}
   hitModifier: 0
-  conditionalAmount: 1e00000028000000
-  conditionalExecuteAmount: 
 --- !u!1 &1305787794050330
 GameObject:
   m_ObjectHideFlags: 0

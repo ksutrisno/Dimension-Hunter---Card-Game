@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuffExist : Condition
+
+[System.Serializable]
+public class Buff_Condition : Condition
 {
     [SerializeField]
     Buff m_buff;
+
+
+
 
     public override bool ConditionFulfilled(List<Character> targetList, Character owner)
     {

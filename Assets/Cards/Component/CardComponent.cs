@@ -30,7 +30,7 @@ public abstract class CardComponent : MonoBehaviour
     private int [] m_executeAmount = { 1, 1 };
 
     [SerializeField]
-    private Condition[] m_conditions;
+    private List<ConditionFactory> m_conditions;
 
 
     [SerializeField]
@@ -40,6 +40,7 @@ public abstract class CardComponent : MonoBehaviour
     public List<Character> Target { get => m_target; set => m_target = value; }
     protected int Amount
     { get => m_amount[m_card.Level]; }
+
     public virtual int ExecuteAmount
     {
         get
@@ -57,17 +58,7 @@ public abstract class CardComponent : MonoBehaviour
     }
 
 
-    protected bool ConditionFulfilled()
-    {
-        for (int i = 0; i < m_conditions.Length; i++)
-        {
-            if (!m_conditions[i].ConditionFulfilled(Target, m_card.Owner))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+
     public virtual void UpdateComponent()
     {
 
@@ -114,6 +105,11 @@ public abstract class CardComponent : MonoBehaviour
     public virtual void Init(Card card)
     {
         m_card = card;
+
+    }
+
+    protected virtual void PostExecute()
+    {
 
     }
 
