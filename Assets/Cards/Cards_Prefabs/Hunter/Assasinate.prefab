@@ -387,8 +387,9 @@ GameObject:
   - component: {fileID: 222858488260328760}
   - component: {fileID: 223231068574436536}
   - component: {fileID: 61721599730136060}
+  - component: {fileID: -4085296554340113334}
   - component: {fileID: 114443663896958752}
-  - component: {fileID: 7426310442634875980}
+  - component: {fileID: 7874857514651829973}
   m_Layer: 0
   m_Name: Assasinate
   m_TagString: Untagged
@@ -472,6 +473,26 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 11.988665, y: 16.714895}
   m_EdgeRadius: 0
+--- !u!114 &-4085296554340113334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128266219949218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74eabf8d31f78384d9d669cf674052a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_amount: 0000000000000000
+  m_targetType: 0
+  m_target: []
+  m_executeAmount: 0100000001000000
+  m_conditions:
+  - {fileID: 0}
+  m_animationEffect: {fileID: 0}
+  hitModifier: 0
 --- !u!114 &114443663896958752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,7 +523,7 @@ MonoBehaviour:
   m_uiDesc: {fileID: 1031040482357752}
   m_components: []
   arrow: {fileID: 1994960319}
---- !u!114 &7426310442634875980
+--- !u!114 &7874857514651829973
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -515,13 +536,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_amount: 0000000000000000
-  m_targetType: 0
+  m_targetType: 1
   m_target: []
   m_executeAmount: 0100000001000000
-  m_conditions:
-  - m_conditionType: 1
-    m_condition:
-      m_conditionTarget: 0
+  m_conditions: []
   m_animationEffect: {fileID: 0}
   hitModifier: 0
 --- !u!1 &1305787794050330

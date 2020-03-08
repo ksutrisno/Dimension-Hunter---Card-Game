@@ -2344,7 +2344,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_cards.Array.data[1]
       value: 
-      objectReference: {fileID: 114443663896958752, guid: d59ec820dfe207a4983d85232ed9a6a3,
+      objectReference: {fileID: 114443663896958752, guid: 4bba9b89fdd38c64cb3f0592915e4d2f,
         type: 3}
     - target: {fileID: 114906945535083224, guid: 3e2424dc0f685374e93f49bb4e71c567,
         type: 3}
@@ -2374,7 +2374,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_cards.Array.data[0]
       value: 
-      objectReference: {fileID: 114443663896958752, guid: 28041ad39ae2f8e4a9f50b6f67e1b9a4,
+      objectReference: {fileID: 114443663896958752, guid: 4bba9b89fdd38c64cb3f0592915e4d2f,
         type: 3}
     - target: {fileID: 114906945535083224, guid: 3e2424dc0f685374e93f49bb4e71c567,
         type: 3}

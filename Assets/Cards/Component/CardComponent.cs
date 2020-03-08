@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
+using System.IO;
 
 public abstract class CardComponent : MonoBehaviour
 {
@@ -30,7 +30,7 @@ public abstract class CardComponent : MonoBehaviour
     private int [] m_executeAmount = { 1, 1 };
 
     [SerializeField]
-    private List<ConditionFactory> m_conditions;
+    private List<Condition> m_conditions;
 
 
     [SerializeField]
@@ -115,5 +115,45 @@ public abstract class CardComponent : MonoBehaviour
 
 
     public abstract string GetDescription();
+
+
+    public void AddCondition(ConditionEnum condition)
+    {
+        Condition asset = null;
+        switch (condition)
+        {
+           
+            case ConditionEnum.kBuff:
+                asset = ScriptableObject.CreateInstance<Buff_Condition>();
+                m_conditions.Add(asset);
+                break;
+            case ConditionEnum.kHP:
+                asset = ScriptableObject.CreateInstance<HP_Condition>();
+                m_conditions.Add(asset);
+                break;
+            default:
+                break;
+
+
+        }
+
+        if(asset != null)
+        {
+            string path = "Assets/Cards/Conditional/";
+           
+            string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + asset + ".asset");
+
+            AssetDatabase.CreateAsset(asset, assetPathAndName);
+
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
   
+            
+        }
+      
+    }
+
+ 
+
 }

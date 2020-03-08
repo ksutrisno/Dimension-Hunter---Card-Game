@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [System.Serializable]
-public class Condition : ScriptableObject
+public class Condition:ScriptableObject
 {
     public enum ConditionTarget
     {
@@ -41,6 +41,5 @@ public class Condition : ScriptableObject
 
     }
 
-    
 }
 
