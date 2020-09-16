@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zone : MonoBehaviour {
-
+public class Zone : MonoBehaviour
+{
+    //Is the animation curved or straight
     [SerializeField]
     private bool m_curved = true;
+
+    //Card capacity
     [SerializeField]
     protected int m_capacity = 10;
 
+    //Zone content
     [SerializeField]
     protected Transform m_content;
 
+    //Zone owner
     protected Character m_owner;
-
-    protected delegate void PostAddedDelegate(MyObject obj);
-    protected PostAddedDelegate PostAdd;
-
-    protected delegate void PreAddedDelegate(MyObject obj);
-    protected PreAddedDelegate PreAdd;
 
     [SerializeField]
     private float offsetZ;
@@ -30,12 +28,31 @@ public class Zone : MonoBehaviour {
     [SerializeField]
     protected bool m_isVisible = true;
 
+    //Whether card is facing up or down
     [SerializeField]
     protected bool m_isFaceUp = true;
 
 
+    //The location of the first child
     private float m_firstChildLocalPosition;
 
+
+
+    #region delegates
+    protected delegate void PostAddedDelegate(MyObject obj);
+
+    protected PostAddedDelegate PostAdd;
+
+    protected delegate void PreAddedDelegate(MyObject obj);
+
+    protected PreAddedDelegate PreAdd;
+    #endregion
+
+
+    #region getter & setter
+    /// <summary>
+    /// Get all cards within the zone
+    /// </summary>
     public List<Card> Cards
     {
         get
@@ -48,9 +65,8 @@ public class Zone : MonoBehaviour {
 
             return cards;
         }
-       
-
     }
+
 
     public Transform Content
     {
@@ -64,43 +80,56 @@ public class Zone : MonoBehaviour {
             m_content = value;
         }
     }
+    #endregion
+
 
     protected virtual void Awake()
-    { 
+    {
         m_owner = GetComponentInParent<Character>();
     }
 
 
+    /// <summary>
+    /// Add card to the zone
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="timer"></param>
     public void Add(MyObject obj, float timer)
     {
-        if(m_content.childCount < m_capacity)
+        if (m_content.childCount < m_capacity)
         {
             StartCoroutine(StartAddCoroutine(obj, timer));
         }
-       
     }
 
+
+
+    /// <summary>
+    /// Start the coroutine to add card to the zone
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="timer"></param>
     public IEnumerator StartAddCoroutine(MyObject obj, float timer)
     {
 
-        if(PreAdd != null)
-        {
-            PreAdd(obj);
-        }
+        PreAdd?.Invoke(obj);
 
         obj.Ui.SetActive(m_isVisible);
 
         yield return AddCoroutine(obj, timer);
 
-        if(PostAdd != null)
-        {
-            PostAdd(obj);
-        }
+        PostAdd?.Invoke(obj);
 
         Arrange();
-    
     }
 
+
+    /// <summary>
+    /// Card animation when moving to zone
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="timer"></param>
+    /// <returns></returns>
     protected virtual IEnumerator AddCoroutine(MyObject obj, float timer)
     {
         float time = 0;
@@ -117,15 +146,15 @@ public class Zone : MonoBehaviour {
 
 
             Quaternion targetRotation;
-        
-           targetRotation = obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, transform.rotation, time / timer);
-            
-  
+
+            targetRotation = obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, transform.rotation, time / timer);
+
+
 
             obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, targetRotation, time / timer);
 
             Vector3 currentPos = Vector3.Lerp(obj.transform.position, transform.position, time / timer);
-            if(m_curved)
+            if (m_curved)
             {
                 currentPos.x += Vector3.up.x * Mathf.Sin(Mathf.Clamp01(time / timer) * Mathf.PI);
                 currentPos.y += Vector3.up.y * Mathf.Sin(Mathf.Clamp01(time / timer) * Mathf.PI);
@@ -137,22 +166,23 @@ public class Zone : MonoBehaviour {
 
         }
 
-            obj.CurrentZone = this;
+        obj.CurrentZone = this;
 
-            obj.transform.SetParent(transform);
+        obj.transform.SetParent(transform);
 
-             obj.transform.rotation = transform.rotation;
+        obj.transform.rotation = transform.rotation;
 
-            obj.transform.transform.position = transform.position;
+        obj.transform.transform.position = transform.position;
 
         obj.Back.SetActive(!m_isFaceUp);
         obj.Front.SetActive(m_isFaceUp);
 
         obj.gameObject.SetActive(m_isVisible);
-
-       
     }
 
+    /// <summary>
+    /// Shuffle cards in the zone
+    /// </summary>
     public void Shuffle()
     {
         foreach (Transform child in m_content)
@@ -161,19 +191,23 @@ public class Zone : MonoBehaviour {
         }
     }
 
+
+
+    /// <summary>
+    /// Arrange card inside the zone
+    /// </summary>
     public void Arrange()
     {
- 
-       // Debug.Log("Arrange");
+
         for (int i = 0; i < Content.childCount; i++)
         {
-            Content.GetChild(i).transform.localPosition = new Vector3(Content.GetChild(i).transform.localPosition.x , m_offset.y * i, m_offset.z * i);
+            Content.GetChild(i).transform.localPosition = new Vector3(Content.GetChild(i).transform.localPosition.x, m_offset.y * i, m_offset.z * i);
         }
 
-       
+
 
         int num = 0;
-        for (int i = 0; i < Content.childCount/2; i++)
+        for (int i = 0; i < Content.childCount / 2; i++)
         {
             num++;
             Content.GetChild(i).transform.localPosition = new Vector3(Content.GetChild(i).transform.localPosition.x, Content.GetChild(i).transform.localPosition.y * num * 0.05f, Content.GetChild(i).transform.localPosition.z);
@@ -181,11 +215,9 @@ public class Zone : MonoBehaviour {
 
         num = 0;
 
-        for (int i = Content.childCount -1; i > Content.childCount / 2; i--)
+        for (int i = Content.childCount - 1; i > Content.childCount / 2; i--)
         {
             Content.GetChild(i).transform.localPosition = new Vector3(Content.GetChild(i).transform.localPosition.x, Content.GetChild(i).transform.localPosition.y * num * 0.05f, Content.GetChild(i).transform.localPosition.z);
         }
     }
 }
-
-
