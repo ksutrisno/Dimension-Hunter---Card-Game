@@ -15,7 +15,7 @@ public class DealDamageComponent : CardComponent
         base.Execute();
 
 
-        m_card.Owner.PlayAttackAnim(0.4f);
+        Card.Owner.PlayAttackAnim(0.4f);
 
         foreach (var target in Target)
         {

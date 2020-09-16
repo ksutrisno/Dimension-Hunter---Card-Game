@@ -5604,8 +5604,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_type: 1
   m_sprite: {fileID: 21300000, guid: a6fde475886ac6e4788634decfe6300d, type: 3}
-  m_currentHealth: 12
-  m_health: 12
+  m_currentHealth: 20
+  m_health: 20
   m_energy: 2
   m_currentEnergy: 0
   m_drawPower: 5

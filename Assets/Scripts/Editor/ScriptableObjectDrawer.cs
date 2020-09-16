@@ -10,7 +10,8 @@ public class ScriptableObjectDrawer : PropertyDrawer
     private Editor editor = null;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-    {
+    {   
+     
         // Draw label
         EditorGUI.PropertyField(position, property, label, true);
 
@@ -20,6 +21,7 @@ public class ScriptableObjectDrawer : PropertyDrawer
             property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, GUIContent.none);
         }
 
+
         // Draw foldout properties
         if (property.isExpanded)
         {
@@ -28,8 +30,15 @@ public class ScriptableObjectDrawer : PropertyDrawer
 
             // Draw object properties
             if (!editor)
+            {
                 Editor.CreateCachedEditor(property.objectReferenceValue, null, ref editor);
-            editor.OnInspectorGUI();
+            }
+            
+            if(editor)
+            {
+                editor.OnInspectorGUI();
+            }
+         
 
             // Set indent back to what it was
             EditorGUI.indentLevel--;

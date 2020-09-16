@@ -13,8 +13,6 @@ public class Condition:ScriptableObject
     }
 
 
-
-   
     [SerializeField]
     protected ConditionTarget m_conditionTarget;
 

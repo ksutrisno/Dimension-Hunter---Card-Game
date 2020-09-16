@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76ce4426283e64eecb2d6aaccbdd84f9, type: 3}
-  m_Name: (HP_Condition)
+  m_Name: (HP_Condition) 1
   m_EditorClassIdentifier: 
   m_conditionTarget: 1
-  type: 3
+  type: 0
   percentage: 30

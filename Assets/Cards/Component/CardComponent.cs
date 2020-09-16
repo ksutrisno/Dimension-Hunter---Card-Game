@@ -24,7 +24,7 @@ public abstract class CardComponent : MonoBehaviour
     [SerializeField]
     protected List<Character> m_target = new List<Character>();
 
-    protected Card m_card;
+    private Card card;
 
     [SerializeField]
     private int [] m_executeAmount = { 1, 1 };
@@ -39,7 +39,7 @@ public abstract class CardComponent : MonoBehaviour
     public TargetEnum TargetType { get => m_targetType; set => m_targetType = value; }
     public List<Character> Target { get => m_target; set => m_target = value; }
     protected int Amount
-    { get => m_amount[m_card.Level]; }
+    { get => m_amount[Card.Level]; }
 
     public virtual int ExecuteAmount
     {
@@ -47,7 +47,7 @@ public abstract class CardComponent : MonoBehaviour
         {
             if(m_executeAmount.Length > 0)
             {
-                return m_executeAmount[m_card.Level];
+                return m_executeAmount[Card.Level];
             }
             else
             {
@@ -57,26 +57,39 @@ public abstract class CardComponent : MonoBehaviour
         }
     }
 
-
+    public Card Card { get => card; set => card = value; }
 
     public virtual void UpdateComponent()
     {
 
     }
 
+    public bool ConditionFulfilled()
+    {
+        foreach (var condition in m_conditions)
+        {
+            if(!condition.ConditionFulfilled(m_target, Card.Owner))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public virtual bool Execute()
     {
+
         if(Target.Count == 0)
         {
             Target.Clear();
             if (m_targetType == TargetEnum.kSelf)
             {
-                m_target.Add(m_card.Owner);
+                m_target.Add(Card.Owner);
             }
             else if (m_targetType == TargetEnum.kAll)
             {
                 Target.Clear();
-                if (m_card.Owner.type == Character.Type.kEnemy)
+                if (Card.Owner.type == Character.Type.kEnemy)
                 {
                     m_target.Add(CombatManager.instance.Player);
                 }
@@ -91,7 +104,7 @@ public abstract class CardComponent : MonoBehaviour
             else
             {
                 Target.Clear();
-                if (m_card.Owner.type == Character.Type.kEnemy)
+                if (Card.Owner.type == Character.Type.kEnemy)
                 {
                     m_target.Add(CombatManager.instance.Player);
                 }
@@ -104,7 +117,7 @@ public abstract class CardComponent : MonoBehaviour
 
     public virtual void Init(Card card)
     {
-        m_card = card;
+        Card = card;
 
     }
 

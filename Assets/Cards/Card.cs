@@ -326,9 +326,13 @@ public class Card : MyObject {
         foreach (CardComponent component in m_components)
         {
                 for (int i = 0; i < component.ExecuteAmount; i++)
-                {
-                    yield return new WaitForSeconds(0.15f);
-                    component.Execute();
+                {   
+                    if(component.ConditionFulfilled())
+                    {
+                        yield return new WaitForSeconds(0.15f);
+                        component.Execute();
+                    }
+
                 }
           
         }
@@ -342,7 +346,11 @@ public class Card : MyObject {
         foreach (CardComponent comp in m_components)
         {
             comp.UpdateComponent();
-            m_descriptionText.text += comp.GetDescription() + "\n";
+            if(comp.ConditionFulfilled())
+            {
+                m_descriptionText.text += comp.GetDescription() + "\n";
+            }
+           
         }
         m_descriptionText.text += m_description;
 

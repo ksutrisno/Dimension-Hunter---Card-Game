@@ -5,20 +5,23 @@ using UnityEditor;
 [CustomEditor(typeof(CardComponent), true)]
 public class CardComponentEditor : Editor
 {
+    [SerializeField]
+    private ConditionEnum condition;
+
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
         CardComponent cardComponent = (CardComponent)target;
-        if (GUILayout.Button("Add HP Condition"))
+
+        GUILayout.Space(20);
+        condition = (ConditionEnum)EditorGUILayout.EnumPopup("Add Condition:", condition);
+
+        if (GUILayout.Button("Create Condition"))
         {
-            cardComponent.AddCondition(ConditionEnum.kHP);
+            cardComponent.AddCondition(condition);
         }
  
-        if (GUILayout.Button("Add Buff Condition"))
-        {
-            cardComponent.AddCondition(ConditionEnum.kBuff);
-        }
     }
 }
 
