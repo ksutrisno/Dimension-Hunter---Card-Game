@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class Character : MonoBehaviour {
+public abstract class Character : MonoBehaviour
+{
 
     public enum Type
     {
@@ -18,26 +20,22 @@ public abstract class Character : MonoBehaviour {
     private Sprite m_sprite;
 
     [SerializeField]
-    protected float m_currentHealth;
+    private float m_currentHealth;
     [SerializeField]
-    protected float m_health;
+    private float m_health;
 
     protected int m_attack;
     protected int m_armor;
     protected int m_luck;
 
-    protected float m_dodgeChance;
-    protected float m_hit;
-
-    protected int m_gold;
 
 
     [SerializeField]
-   protected int m_energy = 3;
+    protected int m_energy = 3;
 
     [SerializeField]
     protected int m_currentEnergy = 3;
-    protected int m_evoPoint;
+
 
     [SerializeField]
     protected int m_drawPower = 5;
@@ -55,24 +53,14 @@ public abstract class Character : MonoBehaviour {
     protected DiscardPile m_discardPile;
 
     protected Character m_opponent;
+    [SerializeField]
+    protected TextMeshProUGUI m_energyText;
 
     [SerializeField]
-    private Text m_characterHealthText;
+    private Transform m_tempZone;
 
-    [SerializeField]
-    private Image m_characterHealthFill;
+    public Transform TempZone { get => m_tempZone; set => m_tempZone = value; }
 
-    [SerializeField]
-    private SpriteRenderer m_spriteRenderer;
-
-    [SerializeField]
-    private List<Buff> m_buffList = new List<Buff>();
-
-    [SerializeField]
-    private GameObject m_buffs;
-
-    [SerializeField]
-    private StatusEffect m_statusEffectPrefab;
 
     #region Getter & Setter
 
@@ -132,57 +120,75 @@ public abstract class Character : MonoBehaviour {
         set
         {
             m_currentEnergy = value;
+
+            if (m_energyText)
+                m_energyText.text = m_currentEnergy + "/" + m_energy;
         }
     }
 
+    #endregion
+
+
+
+    [SerializeField]
+    private Text m_characterHealthText;
+
+    [SerializeField]
+    private Image m_characterHealthFill;
+
+    [SerializeField]
+    private SpriteRenderer m_spriteRenderer;
+
+    private List<Buff> m_buffList = new List<Buff>();
+
+    [SerializeField]
+    private GameObject m_buffs;
+
+    [SerializeField]
+    private StatusEffect m_statusEffectPrefab;
+
+
+    private Vector2 m_startPos;
+
+
     public Type type { get => m_type; set => m_type = value; }
-    public float DodgeChance { get => m_dodgeChance + m_luck * 5; set => m_dodgeChance = value; }
-    public float Hit { get => m_hit; set => m_hit = value; }
     public int Attack { get => m_attack; set => m_attack = value; }
     public int Armor { get => m_armor; set => m_armor = value; }
     public int Luck { get => m_luck; set => m_luck = value; }
-    public float Health { get => m_health; set => m_health = value; }
-    public float CurrentHealth { get => m_currentHealth; set => m_currentHealth = value; }
     public List<Buff> BuffList { get => m_buffList; set => m_buffList = value; }
-    #endregion
+    public float CurrentHealth { get => m_currentHealth; set => m_currentHealth = value; }
+    public float Health { get => m_health; set => m_health = value; }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         m_spriteRenderer.sprite = m_sprite;
-        m_currentEnergy = m_energy;
-        m_characterHealthText.text = m_currentHealth.ToString() + "/" + m_health.ToString();
-        m_characterHealthFill.fillAmount = m_currentHealth / m_health;
+
+        m_startPos = transform.GetChild(0).position;
+
+        m_characterHealthText.text = m_currentHealth.ToString() + "/" + Health.ToString();
+        m_characterHealthFill.fillAmount = m_currentHealth / Health;
     }
 
-    public bool TakeDamage(int damage, float hit = 0, bool dodgeAble = true)
+    public void TakeDamage(int damage, float hit = 0, bool dodgeAble = true)
     {
-        int rand = Random.Range(0, 100);
+        int rand = UnityEngine.Random.Range(0, 100);
 
-        if(rand < DodgeChance + (m_luck * 5) - hit - m_hit && dodgeAble)
+
+
+        m_currentHealth -= damage;
+
+        m_currentHealth = m_currentHealth < 0 ? 0 : m_currentHealth;
+
+        m_characterHealthText.text = m_currentHealth.ToString() + "/" + Health.ToString();
+        m_characterHealthFill.fillAmount = m_currentHealth / Health;
+
+        PopUp(damage.ToString(), Color.red);
+
+        if (m_currentHealth <= 0)
         {
-            Dodge();
-
-            return false;
+            Die();
         }
-        else
-        {
 
-            m_currentHealth -= damage;
-
-            m_currentHealth = m_currentHealth < 0 ? 0 : m_currentHealth;
-
-            m_characterHealthText.text = m_currentHealth.ToString() + "/" + m_health.ToString();
-            m_characterHealthFill.fillAmount = m_currentHealth / m_health;
-
-            PopUp(damage.ToString(), Color.red);
-
-            if(m_currentHealth<= 0)
-            {
-                Die();
-            }
-
-            return true;
-        }
     }
 
     protected virtual void Die()
@@ -190,20 +196,16 @@ public abstract class Character : MonoBehaviour {
 
     }
 
-    private void Dodge()
-    {
-        PopUp("miss", Color.white);
-    }
 
 
     public void Heal(int amount)
     {
         m_currentHealth += amount;
 
-        m_currentHealth = m_currentHealth > m_health? m_health : m_currentHealth;
+        m_currentHealth = m_currentHealth > Health ? Health : m_currentHealth;
 
-        m_characterHealthText.text = m_currentHealth.ToString() + "/" + m_health.ToString();
-        m_characterHealthFill.fillAmount = m_currentHealth / m_health;
+        m_characterHealthText.text = m_currentHealth.ToString() + "/" + Health.ToString();
+        m_characterHealthFill.fillAmount = m_currentHealth / Health;
 
         PopUp(amount.ToString(), Color.green);
     }
@@ -211,13 +213,36 @@ public abstract class Character : MonoBehaviour {
 
     private void PopUp(string message, Color color)
     {
-         Vector2 position = transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(0.5f, 1.0f), 0);
-         GameObject obj = Instantiate(Resources.Load("DamagePopUp")) as GameObject;
-         obj.GetComponent<Text>().color = color;
-         obj.transform.position = position;
-         obj.GetComponent<Text>().text = message;
-         obj.GetComponent<Rigidbody2D>().velocity = Vector2.up * 2f - Vector2.right * 0.75f;
-         Destroy(obj, 0.5f);
+        Vector2 position = transform.position + new Vector3(UnityEngine.Random.Range(-0.5f, 0.5f), UnityEngine.Random.Range(0.5f, 1.0f), 0);
+        GameObject obj = Instantiate(Resources.Load("DamagePopUp")) as GameObject;
+        obj.GetComponent<Text>().color = color;
+        obj.transform.position = position;
+        obj.GetComponent<Text>().text = message;
+        obj.GetComponent<Rigidbody2D>().velocity = Vector2.up * 2f - Vector2.right * 0.5f;
+        Destroy(obj, 0.6f);
+
+    }
+
+    public abstract IEnumerator Turn();
+
+
+    public virtual IEnumerator StartTurnCoroutine()
+    {
+
+        EvaluateBuff();
+
+        CombatManager.instance.CheckEnemyList();
+
+        m_currentEnergy = m_energy;
+
+
+        yield return null;
+
+    }
+
+    public IEnumerator Draw()
+    {
+        yield return Hand.DrawCoroutine(m_drawPower);
     }
 
     public virtual IEnumerator Initialize()
@@ -225,27 +250,11 @@ public abstract class Character : MonoBehaviour {
         yield return new WaitUntil(() => m_drawPile.PopulateFromDeck(m_deck));
     }
 
-    public abstract IEnumerator Turn();
-   
-
-    public virtual IEnumerator StartTurnCoroutine()
-    {
-
-        EvaluateBuff();
-
-        m_currentEnergy = m_energy;
-
-
-        yield return m_hand.DrawCoroutine(m_drawPower);
-    }
-
 
 
     public virtual IEnumerator EndTurnCoroutine()
     {
-        yield return new WaitForSeconds(0.5f);
-
-        m_hand.Discard();
+        yield return null;
     }
 
 
@@ -255,15 +264,16 @@ public abstract class Character : MonoBehaviour {
         for (int i = 0; i < m_buffList.Count; i++)
         {
 
-                if(m_buffList[i].name == buff.name)
-                {
-                    m_buffList[i].Duration += buff.Duration;
-                    m_buffs.transform.GetChild(i).GetComponent<StatusEffect>().DurationText.text =
-                    m_buffList[i].Duration.ToString();
+            if (m_buffList[i].name == buff.name)
+            {
+                m_buffList[i].Duration += buff.Duration;
+                m_buffs.transform.GetChild(i).GetComponent<StatusEffect>().DurationText.text =
+                m_buffList[i].Duration.ToString();
 
-                    return;
-                }
+                return;
             }
+        }
+
 
 
         buff.AddEffect(this);
@@ -272,7 +282,6 @@ public abstract class Character : MonoBehaviour {
         StatusEffect status = Instantiate(m_statusEffectPrefab, m_buffs.transform);
         status.Image.sprite = buff.Sprite;
         status.DurationText.text = buff.Duration.ToString();
-
 
     }
 
@@ -306,34 +315,45 @@ public abstract class Character : MonoBehaviour {
 
     IEnumerator PlayAttackCoroutine(float timer)
     {
-        float time = 0;
-        Vector2 startPos = transform.position;
-        Vector2 endPos = Vector2.zero - new Vector2(startPos.x, 0).normalized;
+        var sprite = transform.GetChild(0);
 
-        while (time < timer/2)
+        float time = 0;
+
+        Vector2 direction = (new Vector2(0, 0) - new Vector2(m_startPos.x, 0)).normalized;
+
+        Vector2 endPos = m_startPos + direction;
+
+        while (time < timer / 2)
         {
             yield return new WaitForEndOfFrame();
 
             time += Time.deltaTime;
-            transform.GetChild(0).localPosition = Vector2.Lerp(transform.GetChild(0).localPosition, endPos, time/timer/2);
+            sprite.position = Vector2.Lerp(sprite.position, endPos, time / timer / 2);
 
         }
         time = 0;
 
-        while (time < timer/2)
+        while (time < timer / 2)
         {
             yield return new WaitForEndOfFrame();
 
             time += Time.deltaTime;
-            transform.GetChild(0).localPosition = Vector2.Lerp(endPos, Vector2.zero, time / timer / 2);
+            sprite.position = Vector2.Lerp(endPos, m_startPos, time / timer / 2);
 
         }
-        transform.GetChild(0).localPosition = Vector2.zero;
+        sprite.position = m_startPos;
 
     }
 
+    public virtual IEnumerator PlayCardEffect(Card card)
+    {
+        yield return null;
 
-    public abstract IEnumerator PlayCardEffect(Card card);
 
+    }
 
+    public void PostPlayCard()
+    {
+        CombatManager.instance.CheckEnemyList();
+    }
 }

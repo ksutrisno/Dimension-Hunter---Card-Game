@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Pile : Zone {
+public class Pile : Zone
+{
 
     protected override IEnumerator AddCoroutine(MyObject obj, float timer)
     {
@@ -52,5 +52,9 @@ public class Pile : Zone {
         obj.gameObject.SetActive(m_isVisible);
     }
 
-    
+    private void OnMouseDown()
+    {
+        ZoneView.Instance.Show(m_content);
+    }
+
 }

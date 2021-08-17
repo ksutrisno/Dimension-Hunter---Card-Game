@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatManager : MonoBehaviour {
+public class CombatManager : MonoBehaviour
+{
 
     [SerializeField]
-    private Character player;
+    private Player player;
     [SerializeField]
     private List<Character> enemies = new List<Character>();
 
@@ -15,9 +16,9 @@ public class CombatManager : MonoBehaviour {
 
     public static CombatManager instance;
 
- 
 
-    public Character Player { get => player; set => player = value; }
+
+    public Player Player { get => player; set => player = value; }
     public List<Character> Enemies { get => enemies; set => enemies = value; }
 
     void Awake()
@@ -48,7 +49,6 @@ public class CombatManager : MonoBehaviour {
         {
             yield return enemy.Initialize();
         }
- 
 
     }
 
@@ -56,10 +56,18 @@ public class CombatManager : MonoBehaviour {
     {
         while (m_isCombatActive)
         {
+            StartCoroutine(enemies[0].Draw());
+            yield return player.Draw();
+
+
             yield return PlayerTurn();
             yield return new WaitForSeconds(0.5f);
+
+
             yield return EnemyTurn();
             yield return new WaitForSeconds(0.5f);
+
+            yield return enemies[0].Draw();
         }
     }
 
@@ -73,10 +81,12 @@ public class CombatManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
         m_isPlayerTurn = true;
 
-        yield return  player.StartTurnCoroutine();
-    
-             
-        yield return new WaitUntil(()=>!m_isPlayerTurn);
+        yield return player.StartTurnCoroutine();
+
+
+
+
+        yield return new WaitUntil(() => !m_isPlayerTurn);
 
         yield return player.EndTurnCoroutine();
     }
@@ -90,9 +100,25 @@ public class CombatManager : MonoBehaviour {
             yield return enemies[i].Turn();
 
             yield return enemies[i].EndTurnCoroutine();
+
+
+
         }
-      
-     
+
+
     }
 
+    public void CheckEnemyList()
+    {
+        if (enemies.Count == 0)
+        {
+            m_isCombatActive = false;
+            ShowRewardScreen();
+        }
+    }
+
+    private void ShowRewardScreen()
+    {
+        PopUpManager.Instance.ShowRewardPopup();
+    }
 }

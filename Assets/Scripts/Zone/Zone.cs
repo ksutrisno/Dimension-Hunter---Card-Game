@@ -169,6 +169,7 @@ public class Zone : MonoBehaviour
         obj.CurrentZone = this;
 
         obj.transform.SetParent(transform);
+        obj.transform.SetAsFirstSibling();
 
         obj.transform.rotation = transform.rotation;
 

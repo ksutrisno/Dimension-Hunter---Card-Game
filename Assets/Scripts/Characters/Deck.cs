@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Deck: MonoBehaviour {
+public class Deck : MonoBehaviour
+{
 
     [SerializeField]
     private Character m_owner;
@@ -18,7 +18,7 @@ public class Deck: MonoBehaviour {
     {
         m_owner = GetComponentInParent<Character>();
 
-  
+
     }
 
 
@@ -50,7 +50,7 @@ public class Deck: MonoBehaviour {
 
     public void RemoveCard()
     {
-        
+
     }
 
 
@@ -58,7 +58,7 @@ public class Deck: MonoBehaviour {
     {
         if (m_cards.Count == m_capacity)
         {
-          
+
             return;
         }
 
